@@ -137,7 +137,7 @@ function createCatCard(cat) {
             <img src="${cat.image_url}" alt="Cat" loading="lazy">
             <div class="cat-card-content">
                 <span class="cat-status ${statusClass}">${statusLabel}</span>
-                <p class="cat-location">📍 ${cat.location}</p>
+                <p class="cat-location">Location: ${cat.location}</p>
                 <p class="cat-description">${cat.description}</p>
                 <div class="cat-card-actions">
                     <button onclick="findSimilar('${cat.id}')" class="btn btn-sm btn-primary">Find Similar</button>
@@ -165,6 +165,9 @@ async function loadSimilarCats() {
     try {
         // Get target cat
         const targetResponse = await fetch(`${API_BASE}/${catId}`);
+        if (!targetResponse.ok) {
+            throw new Error('Could not load selected cat');
+        }
         const targetCat = await targetResponse.json();
         
         const targetDiv = document.getElementById('target-cat');
@@ -178,6 +181,10 @@ async function loadSimilarCats() {
         
         // Get similar cats
         const similarResponse = await fetch(`${API_BASE}/similar/${catId}`);
+        if (!similarResponse.ok) {
+            const error = await similarResponse.json();
+            throw new Error(error.detail || 'Could not load similar cats');
+        }
         const similarCats = await similarResponse.json();
         
         const grid = document.getElementById('similar-cats-grid');
@@ -201,12 +208,23 @@ async function loadSimilarCats() {
 // Create similar cat card HTML
 function createSimilarCatCard(cat) {
     const similarityPercentage = (cat.similarity_score * 100).toFixed(1);
+    const statusClass = `status-${cat.status}`;
+    const statusLabel = cat.status.charAt(0).toUpperCase() + cat.status.slice(1);
+    const contactDetails = [
+        cat.owner_name ? `Name: ${cat.owner_name}` : '',
+        cat.contact_phone ? `Phone: ${cat.contact_phone}` : '',
+        cat.contact_email ? `Email: ${cat.contact_email}` : ''
+    ].filter(Boolean).join('<br>');
     
     return `
         <div class="cat-card">
             <img src="${cat.image_url}" alt="Similar Cat" loading="lazy">
             <div class="cat-card-content">
+                <span class="cat-status ${statusClass}">${statusLabel}</span>
+                <p class="cat-location">Location: ${cat.location}</p>
+                <p class="cat-description">${cat.description}</p>
                 <p class="similarity-score">${similarityPercentage}% Match</p>
+                ${contactDetails ? `<div class="contact-info"><strong>Contact</strong><br>${contactDetails}</div>` : ''}
                 <div class="cat-card-actions">
                     <button onclick="findSimilar('${cat.cat_id}')" class="btn btn-sm btn-secondary">Find Similar to This</button>
                 </div>

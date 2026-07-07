@@ -9,7 +9,7 @@
 <body>
     <nav class="navbar">
         <div class="nav-container">
-            <h1 class="nav-title">🐱 Pet Rescue & Rehoming</h1>
+            <h1 class="nav-title">Pet Rescue & Rehoming</h1>
             <ul class="nav-links">
                 <li><a href="index.html">Home</a></li>
                 <li><a href="upload.html" class="active">Upload Cat</a></li>
@@ -47,6 +47,21 @@
                 <div class="form-group">
                     <label for="description">Description *</label>
                     <textarea id="description" name="description" rows="4" placeholder="Describe the cat (color, markings, size, etc.)" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="owner_name">Your Name</label>
+                    <input type="text" id="owner_name" name="owner_name" placeholder="e.g., Ayesha Perera">
+                </div>
+
+                <div class="form-group">
+                    <label for="contact_phone">Phone</label>
+                    <input type="tel" id="contact_phone" name="contact_phone" placeholder="e.g., 0771234567">
+                </div>
+
+                <div class="form-group">
+                    <label for="contact_email">Email</label>
+                    <input type="email" id="contact_email" name="contact_email" placeholder="e.g., owner@example.com">
                 </div>
 
                 <button type="submit" class="btn btn-primary">Upload Cat</button>

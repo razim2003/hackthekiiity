@@ -6,6 +6,9 @@ class CatCreate(BaseModel):
     status: str
     location: str
     description: str
+    owner_name: Optional[str] = None
+    contact_phone: Optional[str] = None
+    contact_email: Optional[str] = None
 
 class CatResponse(BaseModel):
     id: str
@@ -13,6 +16,9 @@ class CatResponse(BaseModel):
     location: str
     description: str
     image_url: str
+    owner_name: Optional[str] = None
+    contact_phone: Optional[str] = None
+    contact_email: Optional[str] = None
     created_at: datetime
 
 class SimilarCatResponse(BaseModel):
@@ -21,4 +27,7 @@ class SimilarCatResponse(BaseModel):
     status: str
     location: str
     description: str
+    owner_name: Optional[str] = None
+    contact_phone: Optional[str] = None
+    contact_email: Optional[str] = None
     similarity_score: float
