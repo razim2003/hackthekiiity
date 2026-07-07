@@ -46,7 +46,10 @@ async def upload_cat(
     image: UploadFile = File(...),
     status: str = Form(...),
     location: str = Form(...),
-    description: str = Form(...)
+    description: str = Form(...),
+    owner_name: str = Form(""),
+    contact_phone: str = Form(""),
+    contact_email: str = Form("")
 ):
     """
     Upload a cat image with metadata
@@ -86,13 +89,24 @@ async def upload_cat(
             "location": location,
             "description": description,
             "image_url": image_url,
-            "embedding": embedding
+            "embedding": embedding,
+            "owner_name": owner_name.strip() or None,
+            "contact_phone": contact_phone.strip() or None,
+            "contact_email": contact_email.strip() or None
         }
         
         try:
             create_cat(cat_data)
-        except Exception:
+        except Exception as exc:
             storage_service.delete_image_by_url(image_url)
+            if "schema cache" in str(exc) and "contact_" in str(exc):
+                raise HTTPException(
+                    status_code=500,
+                    detail=(
+                        "Database contact columns are missing. Run "
+                        "database/add_contact_fields.sql in Supabase SQL Editor."
+                    )
+                )
             raise
         
         return {
@@ -165,6 +179,9 @@ async def get_similar_cats(cat_id: str):
                 "status": cat["status"],
                 "location": cat["location"],
                 "description": cat["description"],
+                "owner_name": cat.get("owner_name"),
+                "contact_phone": cat.get("contact_phone"),
+                "contact_email": cat.get("contact_email"),
                 "similarity_score": similarity_score
             })
         

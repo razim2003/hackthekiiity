@@ -301,6 +301,17 @@ body {
     margin-top: 0.5rem;
 }
 
+.contact-info {
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    color: #374151;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin: 1rem 0;
+    padding: 0.8rem;
+}
+
 .message {
     margin-top: 1rem;
     padding: 1rem;
