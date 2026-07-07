@@ -18,4 +18,7 @@ class CatResponse(BaseModel):
 class SimilarCatResponse(BaseModel):
     cat_id: str
     image_url: str
+    status: str
+    location: str
+    description: str
     similarity_score: float
