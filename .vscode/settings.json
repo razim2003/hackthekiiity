@@ -1,0 +1,9 @@
+{
+    "python-envs.defaultEnvManager": "ms-python.python:system",
+    "chat.tools.terminal.autoApprove": {
+        "/^Get-Location; Test-Path \\.\\\\\\.venv\\\\Scripts\\\\python\\.exe; Test-Path backend\\\\\\.venv\\\\Scripts\\\\python\\.exe$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
+    }
+}

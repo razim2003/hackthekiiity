@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery - Pet Rescue & Rehoming</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <h1 class="nav-title">🐱 Pet Rescue & Rehoming</h1>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="upload.html">Upload Cat</a></li>
+                <li><a href="gallery.html" class="active">Gallery</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        <section class="gallery-section">
+            <h2>Cat Gallery</h2>
+            <div class="filter-bar">
+                <select id="filter-status" class="filter-select">
+                    <option value="">All Status</option>
+                    <option value="lost">Lost</option>
+                    <option value="found">Found</option>
+                    <option value="stray">Stray</option>
+                    <option value="adoptable">Adoptable</option>
+                </select>
+            </div>
+            <div id="cats-grid" class="cats-grid">
+                <p>Loading cats...</p>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+    <script>
+        // Load gallery on page load
+        document.addEventListener('DOMContentLoaded', loadGallery);
+    </script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Similar Cats - Pet Rescue & Rehoming</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <h1 class="nav-title">🐱 Pet Rescue & Rehoming</h1>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="upload.html">Upload Cat</a></li>
+                <li><a href="gallery.html">Gallery</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        <section class="similar-section">
+            <h2>Similar Cats</h2>
+            <div id="target-cat" class="target-cat">
+                <p>Loading target cat...</p>
+            </div>
+            <h3>Top 5 Matches</h3>
+            <div id="similar-cats-grid" class="cats-grid">
+                <p>Loading similar cats...</p>
+            </div>
+            <a href="gallery.html" class="btn btn-secondary">Back to Gallery</a>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+    <script>
+        // Load similar cats on page load
+        document.addEventListener('DOMContentLoaded', loadSimilarCats);
+    </script>
+</body>
+</html>

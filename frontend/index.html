@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Rescue & Rehoming System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <h1 class="nav-title">🐱 Pet Rescue & Rehoming</h1>
+            <ul class="nav-links">
+                <li><a href="index.html" class="active">Home</a></li>
+                <li><a href="upload.html">Upload Cat</a></li>
+                <li><a href="gallery.html">Gallery</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        <section class="hero">
+            <h2>Find Lost Pets with AI Image Matching</h2>
+            <p>Upload cat images and use AI to find visually similar cats. Perfect for reuniting lost pets with their owners.</p>
+            <div class="cta-buttons">
+                <a href="upload.html" class="btn btn-primary">Upload a Cat</a>
+                <a href="gallery.html" class="btn btn-secondary">View Gallery</a>
+            </div>
+        </section>
+
+        <section class="recent-cats">
+            <h3>Recent Uploads</h3>
+            <div id="recent-cats-grid" class="cats-grid">
+                <p>Loading recent cats...</p>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+    <script>
+        // Load recent cats on home page
+        document.addEventListener('DOMContentLoaded', loadRecentCats);
+    </script>
+</body>
+</html>
