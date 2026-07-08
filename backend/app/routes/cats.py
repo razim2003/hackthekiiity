@@ -23,11 +23,17 @@ settings = get_settings()
 
 def ensure_embedding(cat: dict) -> List[float]:
     """
-    Backfill embeddings for older rows created before matching was enabled.
+    Backfill or refresh embeddings for older rows created before CLIP matching.
     """
     existing_embedding = cat.get("embedding")
-    if existing_embedding:
+    if embedding_service.is_clip_embedding(existing_embedding):
         return existing_embedding
+
+    if existing_embedding:
+        print(
+            f"[similar] regenerating legacy embedding for cat {cat.get('id')} "
+            f"length: {len(existing_embedding)}"
+        )
 
     try:
         with urlopen(cat["image_url"], timeout=10) as response:
@@ -37,6 +43,9 @@ def ensure_embedding(cat: dict) -> List[float]:
         update_cat_embedding(cat["id"], embedding)
         cat["embedding"] = embedding
         return embedding
+    except RuntimeError as exc:
+        print(f"Could not generate CLIP embedding for cat {cat.get('id')}: {exc}")
+        return []
     except Exception as exc:
         print(f"Could not backfill embedding for cat {cat.get('id')}: {exc}")
         return []
@@ -79,7 +88,20 @@ async def upload_cat(
         if not image_url:
             raise HTTPException(status_code=500, detail="Failed to upload image")
 
-        embedding = embedding_service.generate_embedding(img)
+        try:
+            embedding = embedding_service.generate_embedding(img)
+        except RuntimeError as exc:
+            storage_service.delete_image_by_url(image_url)
+            error_msg = str(exc)
+            if "OpenCLIP" in error_msg or "unavailable" in error_msg:
+                raise HTTPException(
+                    status_code=503,
+                    detail="Image embedding model is unavailable. Please ensure open-clip-torch and torch are installed correctly."
+                ) from exc
+            raise HTTPException(
+                status_code=500,
+                detail=f"Failed to generate embedding: {error_msg}"
+            ) from exc
         
         # Save to database
         cat_id = str(uuid.uuid4())
@@ -153,6 +175,11 @@ async def get_similar_cats(cat_id: str):
             raise HTTPException(status_code=404, detail="Cat not found")
         
         target_embedding = ensure_embedding(target_cat)
+        if not embedding_service.is_clip_embedding(target_embedding):
+            raise HTTPException(
+                status_code=503,
+                detail="Target cat embedding is unavailable"
+            )
         print(f"[similar] target embedding length: {len(target_embedding)}")
         
         # Get all other cats
@@ -163,6 +190,10 @@ async def get_similar_cats(cat_id: str):
         similarities = []
         for cat in other_cats:
             cat_embedding = ensure_embedding(cat)
+            if not embedding_service.is_clip_embedding(cat_embedding):
+                print(f"[similar] skipping non-CLIP embedding for cat id: {cat['id']}")
+                continue
+
             similarity_score = embedding_service.compare_embeddings(
                 target_embedding, 
                 cat_embedding
