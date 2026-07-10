@@ -5,7 +5,7 @@ A full-stack web application that allows users to upload cat images (lost, found
 ## Features
 
 - **Upload Cat Images**: Upload cat photos with status, location, and description
-- **AI-Powered Matching**: Uses CLIP (OpenCLIP) model to generate image embeddings
+- **AI-Powered Matching**: Uses OpenCLIP image embeddings for similarity search
 - **Similarity Search**: Find visually similar cats using cosine similarity
 - **Gallery View**: Browse all uploaded cats with filtering by status
 - **Modern UI**: Clean, responsive design with vanilla HTML/CSS/JavaScript
@@ -15,7 +15,7 @@ A full-stack web application that allows users to upload cat images (lost, found
 ### Backend
 - **FastAPI**: Python web framework
 - **Supabase**: PostgreSQL database and Storage
-- **OpenCLIP/CLIP**: AI model for image embeddings
+- **OpenCLIP**: AI model for image embeddings
 - **PyTorch**: Deep learning framework
 - **Pillow**: Image processing
 
@@ -196,11 +196,12 @@ Find visually similar cats using CLIP embeddings.
    - User uploads image via frontend
    - FastAPI receives the image
    - Image is uploaded to Supabase Storage
-   - CLIP model generates embedding vector
+  - OpenCLIP model generates a normalized embedding vector
    - Metadata and embedding saved to Supabase PostgreSQL
 
 2. **Similarity Search**:
    - Target cat's embedding is retrieved
+  - Old fallback embeddings are regenerated on demand or skipped if they cannot be refreshed
    - Compared with all other cat embeddings using cosine similarity
    - Results sorted by similarity score (highest first)
    - Top 5 matches returned
@@ -222,9 +223,10 @@ FastAPI automatically generates interactive API documentation:
 
 ## Troubleshooting
 
-### CLIP Model Loading Issues
-- If the model fails to load, ensure you have enough RAM (at least 4GB available)
-- The first run will download the model (~600MB), which may take time
+### OpenCLIP Model Loading Issues
+- If the model fails to load, ensure the Python packages in `requirements.txt` are installed
+- The first run will download the pretrained OpenCLIP weights, which may take time
+- If older rows still contain fallback embeddings, they will be refreshed when similarity is requested; otherwise re-upload the image
 
 ### Supabase Connection Issues
 - Verify your SUPABASE_URL and SUPABASE_KEY are correct

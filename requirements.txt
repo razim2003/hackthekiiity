@@ -3,7 +3,10 @@ uvicorn[standard]>=0.32.0
 python-multipart>=0.0.12
 supabase>=2.7.0
 pillow>=10.4.0
-
+torch>=2.1.0
+torchvision>=0.16.0
+open_clip_torch>=2.24.0
+numpy>=1.26.4
 python-dotenv>=1.0.0
 pydantic>=2.9.0
 pydantic-settings>=2.6.0
